@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Лекарство и аптеки</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type="number"],
+      select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      p {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Нахождение самой низкой цены</h1>
+    <form method="post" action="{% url 'find_cheapest_price' %}">
+      {% csrf_token %}
+      <label for="kilometer">Дистанция (км):</label>
+      <input type="number" name="kilometer" id="kilometer" required />
+      <br />
+      <label for="medicine">Лекарство:</label>
+      <select name="medicine" id="medicine">
+        {% for medicine in medicines %}
+        <option value="{{ medicine.id }}">{{ medicine.name }}</option>
+        {% endfor %}
+      </select>
+      <br />
+      <input type="submit" value="Find" />
+    </form>
+    {% if cheapest_price %}
+    <p>Самая низкая цена: ${{ cheapest_price }}</p>
+    {% elif error_message %}
+    <p>{{ error_message }}</p>
+    {% endif %}
+  </body>
+</html>
